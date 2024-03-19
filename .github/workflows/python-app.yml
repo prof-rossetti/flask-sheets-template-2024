@@ -15,13 +15,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     # USE OFFICIAL GOOGLE ACTION TO CREATE A CREDENTIALS JSON FILE
     # ... https://github.com/google-github-actions/auth
+    # ... https://github.com/marketplace/actions/authenticate-to-google-cloud
     - id: 'auth'
       name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v0'
+      uses: 'google-github-actions/auth@v2'
       with:
         # uses this encrypted secret set via github repo settings
         # which is essentially a copy of the JSON credentials file contents (for the dev project)
@@ -52,5 +53,7 @@ jobs:
         # access path of credentials file created by earlier auth step:
         #GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
         GOOGLE_CREDENTIALS_FILEPATH: ${{ steps.auth.outputs.credentials_file_path }}
+        # for CI access to google sheets test document:
+        GOOGLE_SHEETS_TEST_DOCUMENT_ID: ${{ secrets.GOOGLE_SHEETS_TEST_DOCUMENT_ID }}
       run: |
         CI=true TEST_SLEEP=20 pytest

@@ -1,6 +1,6 @@
 # Creative Commons Attribution 4.0 International License
 
-Copyright (c) 2023 Michael J Rossetti
+Copyright (c) 2024 Michael J Rossetti
 
 This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.
 

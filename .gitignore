@@ -6,7 +6,7 @@ google-credentials.json
 google-credentials-prod.json
 *-credentials.json
 google-credentials*.json
-
+gha-creds-*.json
 
 
 

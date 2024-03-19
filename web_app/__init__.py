@@ -7,42 +7,27 @@ from flask import Flask
 from authlib.integrations.flask_client import OAuth
 
 from app import APP_ENV, APP_VERSION
-from app.spreadsheet_service import SpreadsheetService
+#from app.spreadsheet_service import SpreadsheetService
 
 from web_app.routes.home_routes import home_routes
 from web_app.routes.auth_routes import auth_routes
 from web_app.routes.user_routes import user_routes
+from web_app.routes.product_routes import product_routes
+from web_app.routes.order_routes import order_routes
 
 load_dotenv()
 
 SECRET_KEY = os.getenv("SECRET_KEY", default="super secret") # IMPORTANT: override in production
 
-APP_TITLE = "My App"
-
-# https://icons.getbootstrap.com/
-NAV_ICON_CLASS = "bi-globe"
-
-# https://getbootstrap.com/docs/5.1/components/navbar/#color-schemes
-# https://getbootstrap.com/docs/5.1/customize/color/#theme-colors
-NAV_COLOR_CLASS = "navbar-dark bg-primary"
-
 # for google oauth login:
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
-# for google analytics (universal analytics):
+# for google analytics:
 GA_TRACKER_ID = os.getenv("GA_TRACKER_ID", default="G-OOPS")
-#GA_DOMAIN = os.getenv("GA_DOMAIN", default="http://localhost:5000") # in production set to "________"
 
 
-def create_app(spreadsheet_service=None):
-
-    if not spreadsheet_service:
-        spreadsheet_service = SpreadsheetService()
-
-    #
-    # INIT
-    #
+def create_app():
 
     app = Flask(__name__)
 
@@ -53,16 +38,12 @@ def create_app(spreadsheet_service=None):
     # for flask flash messaging:
     app.config["SECRET_KEY"] = SECRET_KEY
 
-    # for front-end (maybe doesn't belong here but its ok):
+    # for front-end debugging (maybe doesn't belong here but its ok):
     app.config["APP_ENV"] = APP_ENV
     app.config["APP_VERSION"] = APP_VERSION
-    app.config["APP_TITLE"] = APP_TITLE
-    app.config["NAV_ICON_CLASS"] = NAV_ICON_CLASS
-    app.config["NAV_COLOR_CLASS"] = NAV_COLOR_CLASS
 
     # for client-side google analytics:
     app.config["GA_TRACKER_ID"] = GA_TRACKER_ID
-    #app.config["GA_DOMAIN"] = GA_DOMAIN
 
     # set timezone to mimic production mode when running locally:
     os.environ["TZ"] = "UTC"
@@ -86,7 +67,7 @@ def create_app(spreadsheet_service=None):
     # SERVICES
     #
 
-    app.config["SPREADSHEET_SERVICE"] = spreadsheet_service
+    #app.config["SPREADSHEET_SERVICE"] = spreadsheet_service
 
     #
     # ROUTES
@@ -95,6 +76,8 @@ def create_app(spreadsheet_service=None):
     app.register_blueprint(home_routes)
     app.register_blueprint(auth_routes)
     app.register_blueprint(user_routes)
+    app.register_blueprint(product_routes)
+    app.register_blueprint(order_routes)
 
     return app
 
