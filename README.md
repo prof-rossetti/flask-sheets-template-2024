@@ -1,4 +1,4 @@
-# flask-sheets-template-2023
+# flask-sheets-template-2024
 
 A web application starter template, created in Python with the Flask framework. Allows users to login with their Google accounts (via OAuth). Interfaces with a Google Sheets database.
 
@@ -6,25 +6,43 @@ A web application starter template, created in Python with the Flask framework. 
 
 ## Prerequisites
 
-This application requires a Python development environment:
+This application requires a Python development environment with the following tools installed:
 
-  + Git
-  + Anaconda, Python, Pip
+- Git
+- Anaconda (comes with Python and PIP)
 
-For beginners, here are some instructions for how to install Anaconda, and [set up your local Python development environment](https://github.com/prof-rossetti/intro-to-python/blob/main/exercises/local-dev-setup/README.md#anaconda-python-and-pip).
+For beginners, here are some instructions for how to install Anaconda, and [set up your local Python development environment](https://github.com/prof-rossetti/intro-to-python/blob/main/exercises/local-dev-setup/README.md#option-b-full-setup).
 
 ## Repo Setup
 
-Make a copy of this template repo (as necessary). Clone your copy of the repo onto your local machine. Navigate there from the command-line.
+1. Create a fork of this repository by clicking on the Fork button shown below. Name your repository the name of your new project.
 
-Setup and activate a new Anaconda virtual environment:
+![alt text](/.github/markdown-images/image-1.png)
+
+2. Find your repo's URL by clicking on the Code button shown here. Copy this url to your clipboard.
+
+![alt text](/.github/markdown-images/image-2.png)
+
+2. Using `cd` on the command line, navigate to the folder on your computer where you want to store your project.
+
+3. Clone your new repository onto your local machine by typing
 
 ```sh
-conda create -n flask-sheets-env-2023 python=3.10
-conda activate flask-sheets-env-2023
+git clone <URL of your new repo>
 ```
 
-Install package dependencies:
+4. Run `cd <your-repo-name> ` to navigate into your new project.
+
+## Anaconda Virtual Environment Setup
+
+1. Once inside of your directory, run the following commands to create a new virtual environment
+
+```sh
+conda create -n flask-sheets-2024 python=3.10
+conda activate flask-sheets-2024
+```
+
+2. Install the necessary python dependencies by running
 
 ```sh
 pip install -r requirements.txt
@@ -34,42 +52,11 @@ pip install -r requirements.txt
 
 This app requires a few services, for user authentication and data storage. Follow the instructions below to setup these services.
 
-### Google Cloud Project
+1. Follow the [Google Cloud Setup](/admin/GOOGLE_CLOUD.md) guide to configure a Google Cloud project to facilitate user logins and programmatic access to Google APIs. Obtain and configure client credentials (via environment variables) and service account credentials (via JSON file).
 
-Visit the [Google Cloud Console](https://console.cloud.google.com). Create a new project, and name it. After it is created, select it from the project selection dropdown menu.
+2. Follow the [Google Sheets Database Setup](/admin/GOOGLE_SHEETS.md) guide to setup the google sheets database.
 
-### Google OAuth Client
-
-Visit the [API Credentials](https://console.cloud.google.com/apis/credentials) page for your Google Cloud project. Click the button with the plus icon to "Create Credentials", and choose "Create OAuth Client Id".
-
-Click to "Configure Consent Screen". Leave the domain info blank, and leave the defaults / skip lots of the setup for now. If/when you deploy your app to a production server, you can return to populating this info (or you will be using a different project).
-
-Return to actually creating the "OAuth Client Id". Choose a "Web application" type, give it a name, and set the following "Authorized Redirect URIs" (for now, while the project is still in development):
-
-  + http://localhost:5000/auth/google/callback
-
-After the client is created, note the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`, and set them as environment variables (see configuration section below).
-
-### Google Cloud Service Account Credentials
-
-To fetch data from the Google Sheets database (and use other Google APIs), the app will need access to a local "service account" credentials file.
-
-From the [Google API Credentials](https://console.cloud.google.com/apis/credentials) page, create a new service account as necessary.
-
-For the chosen service account, create new JSON credentials file as necessary from the "Keys" menu, then download the resulting JSON file into the root directory of this repo, specifically named "google-credentials.json".
-
-
-### Google Sheets Database Setup
-
-See the [Google Sheets Database Setup](/admin/SHEETS_DB.md) guide.
-
-### Google Analytics Setup
-
-If you would like to configure Google Analytics, consult the [Google Analytics Setup](/admin/GA.md) guide.
-
-
-
-## Configuration
+3. If you would like to configure Google Analytics, optionally consult the [Google Analytics Setup](/admin/GOOGLE_ANALYTICS.md) guide.
 
 ### Environment Variables
 
@@ -93,19 +80,31 @@ GOOGLE_SHEETS_DOCUMENT_ID="____________"
 # GOOGLE ANALYTICS
 #
 GA_TRACKER_ID="UA-XXXXXXX-1"
+
+#
+# FRONT END CUSTOMIZATIONS
+#
+
 ```
-
-
-
 
 ## Usage
 
 ### Sheets Service
 
-After configuring the Google Sheet database and populating it with products, you should be able to test out the app's ability to fetch products (and generate new orders):
+Interfacing with the Google Sheets database:
 
 ```sh
-python -m app.sheets_service
+python -m app.spreadsheet_service
+```
+
+### Sheets Database
+
+Fetch records from Google Sheets database, and populate with example records (i.e. "seeds"):
+
+```sh
+python -m app.models.product
+
+python -m app.models.order
 ```
 
 ### Web Application
@@ -118,6 +117,8 @@ FLASK_APP=web_app flask run
 
 ## Testing
 
+Setup a separate Google Sheet to use as the test document. Note its identifier and set environment variable `GOOGLE_SHEETS_TEST_DOCUMENT_ID` accordingly, via the ".env" file. Setup the sheets in the same way you would set up the normal google sheet database. Also setup a "books" sheet with columns "id", "title", "author", "year", "created_at", and "updated_at".
+
 Run tests:
 
 ```sh
@@ -126,15 +127,18 @@ pytest
 
 > NOTE: we are using a live sheet for testing, so to avoid API rate limits, we are waiting / sleeping between each test, which makes the tests a bit slow for now
 
-
 ## CI
 
-See more information about the [CI](/admin/CI.md) build process.
+See more information about the [CI](/admin/GITHUB_ACTIONS.md) build process.
+
+Running tests in CI mode:
+
+```sh
+CI=true pytest
+```
 
 ## Deploying
 
 See the [Deployer's Guide](/admin/RENDER.md) for instructions on deploying to a production server hosted by Render.
-
-
 
 ## [License](/LICENSE.md)
