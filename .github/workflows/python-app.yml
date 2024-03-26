@@ -1,13 +1,16 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
 
 name: Python application
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    # branches: [ "main" ]
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -16,19 +19,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-
-    # USE OFFICIAL GOOGLE ACTION TO CREATE A CREDENTIALS JSON FILE
-    # ... https://github.com/google-github-actions/auth
-    # ... https://github.com/marketplace/actions/authenticate-to-google-cloud
-    - id: 'auth'
-      name: 'Authenticate to Google Cloud'
-      uses: 'google-github-actions/auth@v2'
-      with:
-        # uses this encrypted secret set via github repo settings
-        # which is essentially a copy of the JSON credentials file contents (for the dev project)
-        credentials_json: '${{ secrets.GOOGLE_API_CREDENTIALS }}'
-        # this will create a credentials file with a randomized name
-        create_credentials_file:  true
 
     - name: Set up Python 3.10
       uses: actions/setup-python@v3
@@ -48,12 +38,23 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
+    # USE OFFICIAL GOOGLE ACTION TO CREATE A CREDENTIALS JSON FILE
+    # ... https://github.com/google-github-actions/auth
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@v2'
+      with:
+        # uses this encrypted secret set via github repo settings
+        # which is essentially a copy of the JSON credentials file contents
+        credentials_json: '${{ secrets.GOOGLE_API_CREDENTIALS }}'
+        # this will create a credentials file with a randomized name
+        create_credentials_file:  true
+
+
+    # RUN TESTS
     - name: Test with pytest
       env:
-        # access path of credentials file created by earlier auth step:
-        #GOOGLE_APPLICATION_CREDENTIALS: ${{ steps.auth.outputs.credentials_file_path }}
-        GOOGLE_CREDENTIALS_FILEPATH: ${{ steps.auth.outputs.credentials_file_path }}
-        # for CI access to google sheets test document:
         GOOGLE_SHEETS_TEST_DOCUMENT_ID: ${{ secrets.GOOGLE_SHEETS_TEST_DOCUMENT_ID }}
+        GOOGLE_CREDENTIALS_FILEPATH: ${{ steps.auth.outputs.credentials_file_path }}
       run: |
-        CI=true TEST_SLEEP=20 pytest
+        CI=true pytest
