@@ -1,0 +1,10 @@
+# https://github.com/marketplace/actions/github-spellcheck-action
+
+# https://facelessuser.github.io/pyspelling/configuration/
+
+
+matrix:
+- name: markdown
+  sources:
+  - '**/*.md'
+  default_encoding: utf-8
