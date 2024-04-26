@@ -1,0 +1,26 @@
+{% extends "bootstrap_5_layout.html" %}
+{% set page_title = "Books Page" %}
+{% set active_page = "books" %}
+
+{% block content %}
+
+    <h1>Books</h1>
+
+    <p class="lead">This is the books page</p>
+
+    {% if books|length > 0 %}
+
+        <ul>
+            {% for book in books %}
+                <li>{{ book.title }} | {{ book.author }} </li>
+            {% endfor %}
+        </ul>
+        <!--/div-->
+
+    {% else %}
+
+        <p>Oops, no books found.</p>
+
+    {% endif %}
+
+{% endblock %}

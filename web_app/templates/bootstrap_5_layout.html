@@ -74,14 +74,13 @@
     -->
     {% set public_nav = [
       ('/about', 'about', 'About'),
-      ('/products', 'products', 'Products'),
+      ('/books', 'books', 'Books'),
       ('/login', 'login', 'Login'),
     ] -%}
 
     {% set protected_nav = [
       ('/about', 'about', 'About'),
-      ('/products', 'products', 'Products'),
-      ('/user/orders', 'user_orders', 'Orders'),
+      ('/books', 'books', 'Books'),
     ] -%}
 
     <!--
@@ -100,7 +99,7 @@
         https://getbootstrap.com/docs/5.1/customize/color/#theme-colors
     -->
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-danger">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
                 <!--
@@ -177,7 +176,7 @@
             <div class="row">
                 <div class="col-sm-6" style="display: inline; margin-bottom: 5px;">
                     <p class="small">
-                        &copy; Copyright 2024 Your Name Here
+                        &copy; Copyright 2024 MY NAME
                     </p>
                     <p class="small white-space: nowrap;">
                         Made with the <a href="https://github.com/prof-rossetti/flask-sheets-template-2024">Flask Sheets Template 2024</a>
