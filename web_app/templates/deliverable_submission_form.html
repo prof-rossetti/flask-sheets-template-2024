@@ -1,0 +1,39 @@
+{% extends "bootstrap_5_layout.html" %}
+{% set page_title = "Deliverable Submission Form" %}
+{% set active_page = "submission_form" %}
+
+{% block content %}
+
+    <h1>Deliverable Submission Form</h1>
+
+    <form action="/submissions/upload" method="POST" enctype="multipart/form-data">
+
+        <!--label>Stock Symbol:</label>
+        <input type="text" name="symbol" placeholder="MSFT" value="MSFT">
+        <br-->
+
+        <label>Course:</label>
+        <select name="course_name">
+            <option value="OPAN_2343">OPAN 2343</option>
+            <option value="EMSE_6574">EMSE 6574</option>
+            <option value="COSC_1010">COSC 1010</option>
+        </select>
+        <br>
+
+        <label>Assignment:</label>
+        <select name="assignment_name">
+            <option value="RPS">Rock, Paper, Scissors</option>
+            <option value="CRUNCH_SPOTIFY_TAYLOR">Crunch the Spotify (Taylor's Version)</option>
+            <option value="STOCKS_DASHBOARD">Stocks Dashboard</option>
+            <option value="WEB_SCRAPER">Web Scraper</option>
+            <option value="MARKET_SENTIMENTS">Market Sentiments</option>
+        </select>
+        <br>
+
+        <input type="file" name="selected_file" required>
+        <br>
+
+        <button class="btn btn-success">Submit</button>
+    </form>
+
+{% endblock %}
