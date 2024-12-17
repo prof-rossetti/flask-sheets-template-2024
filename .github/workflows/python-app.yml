@@ -56,5 +56,9 @@ jobs:
       env:
         GOOGLE_SHEETS_TEST_DOCUMENT_ID: ${{ secrets.GOOGLE_SHEETS_TEST_DOCUMENT_ID }}
         GOOGLE_CREDENTIALS_FILEPATH: ${{ steps.auth.outputs.credentials_file_path }}
+        GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID}}
+        GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET}}
+        SENDGRID_API_KEY: ${{ secrets.SENDGRID_API_KEY }}
+        SENDGRID_SENDER_ADDRESS: ${{ secrets.SENDGRID_SENDER_ADDRESS }}
       run: |
         CI=true pytest
